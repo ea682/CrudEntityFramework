@@ -25,9 +25,23 @@ namespace CrudEntityFramework.Controllers
         {
             return View(await _contex.Usuario.ToListAsync());
         }
-
-        public IActionResult Privacy()
+        [HttpGet]
+        public IActionResult Create()
         {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(Usuario usuario)
+        {
+            if (ModelState.IsValid)
+            {
+                _contex.Usuario.Add(usuario);
+                await _contex.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
             return View();
         }
 
@@ -36,5 +50,7 @@ namespace CrudEntityFramework.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+
     }
 }
