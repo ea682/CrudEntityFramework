@@ -1,5 +1,7 @@
-﻿using CrudEntityFramework.Models;
+﻿using CrudEntityFramework.Data;
+using CrudEntityFramework.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -11,16 +13,17 @@ namespace CrudEntityFramework.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _contex;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ApplicationDbContext context)
         {
-            _logger = logger;
+            _contex = context;
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await _contex.Usuario.ToListAsync());
         }
 
         public IActionResult Privacy()
